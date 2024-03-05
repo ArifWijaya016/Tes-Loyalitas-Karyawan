@@ -1,0 +1,141 @@
+<!-- quiz.html -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Indikator Loyalitas Karyawan</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    .form-group {
+      margin-bottom: 20px;
+    }
+    .rating-dropdown {
+      width: 80px;
+    }
+  </style>
+</head>
+<body>
+  <nav class="navbar navbar-expand-md navbar-light bg-light">
+    <div class="container">
+      <a class="navbar-brand" href="#">
+        <img src="image/ug.png" alt="Logo" height="30">
+      </a>
+      <span class="navbar-text mx-auto">
+        Employee Engagement (EE)
+      </span>
+    </div>
+  </nav>
+
+  <div class="container mt-4">
+    <form id="quizForm">
+      <div class="row">
+        <div class="col-md-8 mx-auto">
+          <!-- Container for questions -->
+          <div id="questionsContainer"></div>
+        </div>
+      </div>
+
+      <div class="row mt-3">
+        <div class="col-md-4 mx-auto">
+          <button type="button" class="btn btn-primary btn-block" onclick="calculatescoreakhir()">Selesai</button>
+        </div>
+      </div>
+    </form>
+  </div>
+ <!-- Footer -->
+ <footer class="bg-light text-center py-3 mt-auto">
+    <div class="container">
+      <div class="col-md-6 mx-auto"> <!-- mx-auto untuk membuatnya di tengah secara horizontal -->
+        <p>&copy; 2024 - Hak Cipta oleh Laboratorium Multimedia Robotika & Fakultas Psikologi</p>
+      </div>
+    </div>
+  </footer>
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+  <script src="script.js"></script>
+  <script>
+    // Array of questions
+    const questions = [
+      "Saya benar-benar bekerja sepenuh hati",
+      "Saya berusaha mengerjakan pekerjaan saya lebih baik lagi",
+      "Ketika bekerja, saya akan menyelesaikan pekerjaan sampai selesai. ",
+      "Ketika menemukan kesulitan dalam pekerjaan, saya dan rekan kerja akan mencari solusinya bersama. ",
+      "Saya merasa senang ketika saya mengerjakan pekerjaan saya dengan baik",
+      "Saya berusaha menyelesaikan pekerjaan untuk menghindari bekerja lembur jika memungkinkan.",
+      "Ketika bekerja saya selalu berpikir keras",
+    ];
+
+    // Function to generate question elements
+    function generateQuestions() {
+      const questionsContainer = document.getElementById('questionsContainer');
+
+      questions.forEach((question, index) => {
+        const questionNumber = index + 1;
+
+        // Create question container
+        const questionContainer = document.createElement('div');
+        questionContainer.classList.add('form-group');
+
+        // Create question label
+        const questionLabel = document.createElement('label');
+        questionLabel.textContent = `${questionNumber}. ${question}`;
+        questionContainer.appendChild(questionLabel);
+
+        // Create dropdown for rating 1-5
+        const dropdownContainer = document.createElement('div');
+        dropdownContainer.classList.add('rating-dropdown');
+
+        const dropdown = document.createElement('select');
+        dropdown.id = `jawaban${questionNumber}`;
+        dropdown.name = `jawaban${questionNumber}`;
+        dropdown.classList.add('custom-select');
+
+        for (let i = 1; i <= 5; i++) {
+          const optionElement = document.createElement('option');
+          optionElement.value = i;
+          optionElement.text = i;
+          dropdown.appendChild(optionElement);
+        }
+
+        dropdownContainer.appendChild(dropdown);
+        questionContainer.appendChild(dropdownContainer);
+
+        questionsContainer.appendChild(questionContainer);
+      });
+    }
+
+    // Function to calculate score and redirect
+    function calculatescoreakhir() {
+      let scoreakhir = 0;
+
+      // Loop through the dropdowns for each question
+      for (let i = 1; i <= questions.length; i++) {
+        const selectedOption = document.getElementById(`jawaban${i}`);
+        
+        // If an option is selected, add its value to the score
+        if (selectedOption) {
+    scoreakhir += +selectedOption.value;
+}
+localStorage.setItem('scoreakhir', scoreakhir);
+
+// Redirect based on the total score
+if (scoreakhir >= 29) {
+    window.location.href = 'highscore.html';
+} else if (scoreakhir >= 20) {
+    window.location.href = 'moderatscore.html';
+} else if (scoreakhir >= 10) {
+    window.location.href = 'passivelyscore.html';
+} else {
+    window.location.href = 'nilairendah.html';
+}
+    }}
+
+    // Call the function to generate questions on page load
+    generateQuestions();
+  </script>
+</body>
+</html>
